@@ -1,0 +1,9 @@
+/target
+/tarpaulin-target
+/.env
+/.vscode
+/default_*.profraw
+**/cobertura.xml
+/data/*
+!/data/
+!/data/day_*.enc.txt

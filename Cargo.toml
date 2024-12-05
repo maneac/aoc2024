@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+
+default-members = []
+members = ["fetch_day", "rs/*"]
+
+[workspace.dependencies]
+criterion = { version = "0.5.1", features = ["html_reports"] }
+rayon = { version = "1.10.0" }
