@@ -2,9 +2,9 @@ name: Rust
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 env:
   CARGO_TERM_COLOR: always
@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -61,7 +61,7 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: 'github-pr-review'
+          reporter: "github-pr-review"
           clippy_flags: --workspace --all-features -- -D clippy::all
 
       - name: Merge Clippy error check
@@ -72,18 +72,11 @@ jobs:
       - name: Cargo Tarpaulin
         uses: actions-rs/tarpaulin@v0.1
         with:
-          version: '0.22.0'
-          args: "--engine=llvm --packages \"day_*\" --skip-clean --benches --exclude-files \"fetch_day/*,bin/*.rs,benches/*.rs\" --target-dir ./tarpaulin-target"
+          args: '--engine=llvm --packages "day_*" --skip-clean --benches --exclude-files "fetch_day/*,bin/*.rs,benches/*.rs" --target-dir ./tarpaulin-target -o xml'
           timeout: 120
 
-      - name: Replace NaNs
-        run: |
-          mv $(find . -type f -name "cobertura.xml") .
-          sed -i 's/src" line-rate="NaN"/src" line-rate="0"/g' cobertura.xml
-          COV_PC=$(python3 -c $(sed -rn 's/.*<coverage lines-covered="([0-9]+)" lines-valid="([0-9]+)".*/print(\1\/\2)/p' cobertura.xml))
-          sed -i 's/NaN/'$COV_PC'/g' cobertura.xml
       - name: Archive coverage results
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
           path: cobertura.xml
@@ -95,8 +88,8 @@ jobs:
           badge: true
           hide_branch_rate: true
           hide_complexity: true
-          format: 'markdown'
-          output: 'both'
+          format: "markdown"
+          output: "both"
 
       - name: Add Coverage PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
