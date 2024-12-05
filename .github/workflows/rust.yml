@@ -69,11 +69,16 @@ jobs:
         run: |
           cargo clippy --workspace --all-features -- -D clippy::all
 
+      - name: Install Cargo-binstall
+        uses: cargo-bins/cargo-binstall@main
+
+      - name: Install Cargo-Tarpaulin
+        run: |
+          cargo binstall cargo-tarpaulin@0.31.3 --no-confirm --strategies crate-meta-data
+
       - name: Cargo Tarpaulin
-        uses: actions-rs/tarpaulin@v0.1
-        with:
-          args: '--engine=llvm --packages "day_*" --skip-clean --benches --exclude-files "fetch_day/*,bin/*.rs,benches/*.rs" --target-dir ./tarpaulin-target -o xml'
-          timeout: 120
+        run: |
+          cargo tarpaulin --engine=llvm --packages "day_*" --skip-clean --benches --exclude-files "fetch_day/*,bin/*.rs,benches/*.rs" --target-dir ./tarpaulin-target -o xml
 
       - name: Archive coverage results
         uses: actions/upload-artifact@v4
