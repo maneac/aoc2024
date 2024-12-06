@@ -3,25 +3,29 @@ use std::{fs::read_to_string, path::Path};
 pub const PART_1: usize = 0;
 pub const PART_2: usize = 0;
 
+#[must_use]
 pub fn read_data(data_dir: &str) -> String {
     read_to_string(Path::new(data_dir).join("<%= &self.crate_name %>.txt"))
         .unwrap()
         .trim()
-        .to_string()
+        .to_owned()
 }
 
 #[derive(Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Input {}
 
 impl Input {
+    #[must_use]
     pub fn from_data(data: &str) -> Self {
         todo!()
     }
 
+    #[must_use]
     pub fn part_1(&self) -> usize {
         todo!()
     }
 
+    #[must_use]
     pub fn part_2(&self) -> usize {
         todo!()
     }
@@ -46,11 +50,11 @@ mod tests {
             run(&Case {
                 input: super::example().0,
                 expected: super::example().1,
-            })
+            });
         }
 
-        fn run(test: &Case) {
-            assert_eq!(test.expected, Input::from_data(test.input))
+        fn run(test: &Case<'_>) {
+            assert_eq!(test.expected, Input::from_data(test.input));
         }
     }
 
@@ -67,7 +71,7 @@ mod tests {
             run(&Case {
                 data: super::example().1,
                 expected: todo!(),
-            })
+            });
         }
 
         #[test]
@@ -75,11 +79,11 @@ mod tests {
             run(&Case {
                 data: Input::from_data(&read_data(DATA_DIR)),
                 expected: PART_1,
-            })
+            });
         }
 
         fn run(test: &Case) {
-            assert_eq!(test.expected, test.data.part_1())
+            assert_eq!(test.expected, test.data.part_1());
         }
     }
 
@@ -96,7 +100,7 @@ mod tests {
             run(&Case {
                 data: super::example().1,
                 expected: todo!(),
-            })
+            });
         }
 
         #[test]
@@ -104,11 +108,11 @@ mod tests {
             run(&Case {
                 data: Input::from_data(&read_data(DATA_DIR)),
                 expected: PART_2,
-            })
+            });
         }
 
         fn run(test: &Case) {
-            assert_eq!(test.expected, test.data.part_2())
+            assert_eq!(test.expected, test.data.part_2());
         }
     }
 

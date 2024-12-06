@@ -16,25 +16,25 @@ fn bench() {
 
     let mut group = criterion.benchmark_group("Day 01");
 
-    group.bench_with_input("parse contents", &contents, |b, i| {
-        b.iter(|| Input::from_data(i))
+    let _parse = group.bench_with_input("parse contents", &contents, |bench, data| {
+        bench.iter(|| Input::from_data(data));
     });
 
-    group.bench_with_input("part 1", &input, |b, i| {
-        b.iter(|| assert_eq!(PART_1, i.part_1()))
+    let _part_1 = group.bench_with_input("part 1", &input, |bench, day| {
+        bench.iter(|| assert_eq!(PART_1, day.part_1(), "Mismatched results for part 1"));
     });
 
-    group.bench_with_input("part 2", &input, |b, i| {
-        b.iter(|| assert_eq!(PART_2, i.part_2()))
+    let _part_2 = group.bench_with_input("part 2", &input, |bench, day| {
+        bench.iter(|| assert_eq!(PART_2, day.part_2(), "Mismatched results for part 2"));
     });
 
-    group.bench_with_input("total", &contents, |b, i| {
-        b.iter(|| {
-            let data = Input::from_data(i);
-            assert_eq!(PART_1, data.part_1());
-            assert_eq!(PART_2, data.part_2());
-        })
+    let _total = group.bench_with_input("total", &contents, |bench, data| {
+        bench.iter(|| {
+            let day = Input::from_data(data);
+            assert_eq!(PART_1, day.part_1(), "Mismatched result for part 1");
+            assert_eq!(PART_2, day.part_2(), "Mismatched result for part 2");
+        });
     });
 
-    group.finish()
+    group.finish();
 }
