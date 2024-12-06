@@ -1,14 +1,15 @@
-use std::cmp::Ordering;
+use core::cmp::Ordering;
 use std::{fs::read_to_string, path::Path};
 
 pub const PART_1: usize = 5091;
 pub const PART_2: usize = 4681;
 
+#[must_use]
 pub fn read_data(data_dir: &str) -> String {
     read_to_string(Path::new(data_dir).join("day_05.txt"))
         .unwrap()
         .trim()
-        .to_string()
+        .to_owned()
 }
 
 #[derive(Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
@@ -18,6 +19,7 @@ pub struct Input {
 }
 
 impl Input {
+    #[must_use]
     pub fn from_data(data: &str) -> Self {
         let (rules, pages) = data.trim().split_once("\n\n").unwrap();
 
@@ -41,45 +43,50 @@ impl Input {
         }
     }
 
+    #[must_use]
     pub fn part_1(&self) -> usize {
         self.pages
             .iter()
             .filter_map(|page| {
                 self.page_ordering_rules
                     .iter()
-                    .all(|[lhs, rhs]| {
+                    .all(|&[lhs, rhs]| {
                         page.iter()
-                            .position(|entry| entry == lhs)
+                            .position(|entry| lhs.eq(entry))
                             .and_then(|left_idx| {
                                 page.iter()
-                                    .position(|entry| entry == rhs)
+                                    .position(|entry| rhs.eq(entry))
                                     .map(|rhs_idx| [left_idx, rhs_idx])
                             })
                             .is_none_or(|[left_idx, right_idx]| left_idx < right_idx)
                     })
-                    .then_some(page[page.len() / 2] as usize)
+                    .then_some(
+                        #[allow(clippy::indexing_slicing)]
+                        usize::from(page[page.len() >> 1_u8]),
+                    )
             })
             .sum()
     }
 
+    #[must_use]
     pub fn part_2(&self) -> usize {
         self.pages
             .iter()
             .filter(|page| {
-                !self.page_ordering_rules.iter().all(|[lhs, rhs]| {
+                !self.page_ordering_rules.iter().all(|&[lhs, rhs]| {
                     page.iter()
-                        .position(|entry| entry == lhs)
+                        .position(|entry| lhs.eq(entry))
                         .and_then(|left_idx| {
                             page.iter()
-                                .position(|entry| entry == rhs)
+                                .position(|entry| rhs.eq(entry))
                                 .map(|rhs_idx| [left_idx, rhs_idx])
                         })
                         .is_none_or(|[left_idx, right_idx]| left_idx < right_idx)
                 })
             })
             .map(|page| {
-                let mut p = page.clone();
-                p.sort_unstable_by(|&page_lhs, &page_rhs| {
+                let mut sorted_page = page.clone();
+                sorted_page.sort_unstable_by(|&page_lhs, &page_rhs| {
                     if self
                         .page_ordering_rules
                         .binary_search(&[page_lhs, page_rhs])
@@ -96,7 +103,9 @@ impl Input {
                     }
                     Ordering::Equal
                 });
-                p[p.len() / 2] as usize
+                #[allow(clippy::indexing_slicing)]
+                let res = usize::from(sorted_page[sorted_page.len() >> 1_u8]);
+                res
             })
             .sum()
     }
@@ -121,11 +130,11 @@ mod tests {
             run(&Case {
                 input: super::example().0,
                 expected: super::example().1,
-            })
+            });
         }
 
-        fn run(test: &Case) {
-            assert_eq!(test.expected, Input::from_data(test.input))
+        fn run(test: &Case<'_>) {
+            assert_eq!(test.expected, Input::from_data(test.input));
         }
     }
 
@@ -142,7 +151,7 @@ mod tests {
             run(&Case {
                 data: super::example().1,
                 expected: 143,
-            })
+            });
         }
 
         #[test]
@@ -150,11 +159,11 @@ mod tests {
             run(&Case {
                 data: Input::from_data(&read_data(DATA_DIR)),
                 expected: PART_1,
-            })
+            });
         }
 
         fn run(test: &Case) {
-            assert_eq!(test.expected, test.data.part_1())
+            assert_eq!(test.expected, test.data.part_1());
         }
     }
 
@@ -171,7 +180,7 @@ mod tests {
             run(&Case {
                 data: super::example().1,
                 expected: 123,
-            })
+            });
         }
 
         #[test]
@@ -179,11 +188,11 @@ mod tests {
             run(&Case {
                 data: Input::from_data(&read_data(DATA_DIR)),
                 expected: PART_2,
-            })
+            });
         }
 
         fn run(test: &Case) {
-            assert_eq!(test.expected, test.data.part_2())
+            assert_eq!(test.expected, test.data.part_2());
         }
     }
 

@@ -3,11 +3,12 @@ use std::{fs::read_to_string, path::Path};
 pub const PART_1: usize = 2578;
 pub const PART_2: usize = 1972;
 
+#[must_use]
 pub fn read_data(data_dir: &str) -> String {
     read_to_string(Path::new(data_dir).join("day_04.txt"))
         .unwrap()
         .trim()
-        .to_string()
+        .to_owned()
 }
 
 #[derive(Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
@@ -16,11 +17,13 @@ pub struct Input<'i> {
 }
 
 impl<'i> Input<'i> {
+    #[must_use]
     pub fn from_data(data: &'i str) -> Self {
-        let grid = data.lines().map(|line| line.as_bytes()).collect::<Vec<_>>();
+        let grid = data.lines().map(str::as_bytes).collect::<Vec<_>>();
         Self { grid }
     }
 
+    #[must_use]
     pub fn part_1(&self) -> usize {
         let x_locs = self
             .grid
@@ -29,7 +32,7 @@ impl<'i> Input<'i> {
             .flat_map(|(y, line)| {
                 line.iter()
                     .enumerate()
-                    .filter_map(move |(x, c)| (*c == b'X').then_some((y, x)))
+                    .filter_map(move |(x, char)| (*char == b'X').then_some((y, x)))
             })
             .collect::<Vec<_>>();
 
@@ -77,12 +80,13 @@ impl<'i> Input<'i> {
                         && self.grid.get(y - 3).and_then(|row| row.get(x + 3)) == Some(&b'S'),
                 ]
                 .iter()
-                .filter(|v| **v)
+                .filter(|val| **val)
                 .count()
             })
             .sum()
     }
 
+    #[must_use]
     pub fn part_2(&self) -> usize {
         let a_locs = self
             .grid
@@ -91,7 +95,7 @@ impl<'i> Input<'i> {
             .flat_map(|(y, line)| {
                 line.iter()
                     .enumerate()
-                    .filter_map(move |(x, c)| (*c == b'A').then_some((y, x)))
+                    .filter_map(move |(x, char)| (*char == b'A').then_some((y, x)))
             })
             .collect::<Vec<_>>();
 
@@ -122,7 +126,7 @@ impl<'i> Input<'i> {
                         && self.grid.get(y + 1).and_then(|row| row.get(x + 1)) == Some(&b'M'),
                 ]
                 .iter()
-                .filter(|v| **v)
+                .filter(|val| **val)
                 .count()
             })
             .sum()
@@ -148,11 +152,11 @@ mod tests {
             run(&Case {
                 input: super::example().0,
                 expected: super::example().1,
-            })
+            });
         }
 
-        fn run(test: &Case) {
-            assert_eq!(test.expected, Input::from_data(test.input))
+        fn run(test: &Case<'_>) {
+            assert_eq!(test.expected, Input::from_data(test.input));
         }
     }
 
@@ -169,7 +173,7 @@ mod tests {
             run(&Case {
                 data: super::example().1,
                 expected: 18,
-            })
+            });
         }
 
         #[test]
@@ -177,11 +181,11 @@ mod tests {
             run(&Case {
                 data: Input::from_data(&read_data(DATA_DIR)),
                 expected: PART_1,
-            })
+            });
         }
 
-        fn run(test: &Case) {
-            assert_eq!(test.expected, test.data.part_1())
+        fn run(test: &Case<'_>) {
+            assert_eq!(test.expected, test.data.part_1());
         }
     }
 
@@ -198,7 +202,7 @@ mod tests {
             run(&Case {
                 data: super::example().1,
                 expected: 9,
-            })
+            });
         }
 
         #[test]
@@ -206,11 +210,11 @@ mod tests {
             run(&Case {
                 data: Input::from_data(&read_data(DATA_DIR)),
                 expected: PART_2,
-            })
+            });
         }
 
-        fn run(test: &Case) {
-            assert_eq!(test.expected, test.data.part_2())
+        fn run(test: &Case<'_>) {
+            assert_eq!(test.expected, test.data.part_2());
         }
     }
 

@@ -1,13 +1,19 @@
 [package]
 name = "<%= &self.crate_name %>"
-version = "0.1.0"
-edition = "2021"
+edition.workspace = true
+version.workspace = true
+description.workspace = true
+publish.workspace = true
 
 [dependencies]
+anyhow.workspace = true
 
 [dev-dependencies]
-criterion = { workspace = true }
+criterion.workspace = true
 
 [[bench]]
 name = "bench"
 harness = false
+
+[lints]
+workspace = true

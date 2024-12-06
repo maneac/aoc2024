@@ -3,11 +3,12 @@ use std::{fs::read_to_string, path::Path};
 pub const PART_1: usize = 686;
 pub const PART_2: usize = 717;
 
+#[must_use]
 pub fn read_data(data_dir: &str) -> String {
     read_to_string(Path::new(data_dir).join("day_02.txt"))
         .unwrap()
         .trim()
-        .to_string()
+        .to_owned()
 }
 
 #[derive(Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
@@ -16,6 +17,7 @@ pub struct Input {
 }
 
 impl Input {
+    #[must_use]
     pub fn from_data(data: &str) -> Self {
         let list = data
             .trim()
@@ -31,6 +33,8 @@ impl Input {
         Self { list }
     }
 
+    #[must_use]
+    #[allow(clippy::indexing_slicing)]
     pub fn part_1(&self) -> usize {
         self.list
             .iter()
@@ -44,6 +48,8 @@ impl Input {
             .count()
     }
 
+    #[must_use]
+    #[allow(clippy::indexing_slicing)]
     pub fn part_2(&self) -> usize {
         self.list
             .iter()
@@ -55,7 +61,7 @@ impl Input {
                         .all(|win| (1..=3).contains(&win[0].abs_diff(win[1])))
                     || (0..levels.len()).any(|skip| {
                         let mut level = levels.clone();
-                        level.remove(skip);
+                        _ = level.remove(skip);
 
                         (level.windows(2).all(|win| win[0] <= win[1])
                             || level.windows(2).all(|win| win[0] >= win[1]))
@@ -87,11 +93,11 @@ mod tests {
             run(&Case {
                 input: super::example().0,
                 expected: super::example().1,
-            })
+            });
         }
 
-        fn run(test: &Case) {
-            assert_eq!(test.expected, Input::from_data(test.input))
+        fn run(test: &Case<'_>) {
+            assert_eq!(test.expected, Input::from_data(test.input));
         }
     }
 
@@ -108,7 +114,7 @@ mod tests {
             run(&Case {
                 data: super::example().1,
                 expected: 2,
-            })
+            });
         }
 
         #[test]
@@ -116,11 +122,11 @@ mod tests {
             run(&Case {
                 data: Input::from_data(&read_data(DATA_DIR)),
                 expected: PART_1,
-            })
+            });
         }
 
         fn run(test: &Case) {
-            assert_eq!(test.expected, test.data.part_1())
+            assert_eq!(test.expected, test.data.part_1());
         }
     }
 
@@ -137,7 +143,7 @@ mod tests {
             run(&Case {
                 data: super::example().1,
                 expected: 4,
-            })
+            });
         }
 
         #[test]
@@ -145,11 +151,11 @@ mod tests {
             run(&Case {
                 data: Input::from_data(&read_data(DATA_DIR)),
                 expected: PART_2,
-            })
+            });
         }
 
         fn run(test: &Case) {
-            assert_eq!(test.expected, test.data.part_2())
+            assert_eq!(test.expected, test.data.part_2());
         }
     }
 
