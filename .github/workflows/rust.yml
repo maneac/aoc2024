@@ -78,7 +78,7 @@ jobs:
 
       - name: Cargo Tarpaulin
         run: |
-          cargo tarpaulin --release --engine=llvm --packages "day_*" --skip-clean --benches --exclude-files "fetch_day/*,bin/*.rs,benches/*.rs" --target-dir ./tarpaulin-target -o xml
+          cargo tarpaulin --engine=llvm --workspace --skip-clean --run-types Lib --exclude-files "fetch_day/src/main.rs" --target-dir ./tarpaulin-target -o xml
 
       - name: Archive coverage results
         uses: actions/upload-artifact@v4
