@@ -207,7 +207,7 @@ impl Input {
 }
 
 #[cfg(test)]
-mod tests {
+mod day_12_tests {
     use super::*;
 
     const DATA_DIR: &str = "../../data";

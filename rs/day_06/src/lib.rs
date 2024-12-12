@@ -127,7 +127,7 @@ impl Iterator for Facing {
 }
 
 #[cfg(test)]
-mod tests {
+mod day_06_tests {
     use super::*;
 
     const DATA_DIR: &str = "../../data";

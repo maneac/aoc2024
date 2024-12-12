@@ -138,7 +138,7 @@ enum DiskMapEntry {
 }
 
 #[cfg(test)]
-mod tests {
+mod day_09_tests {
     use super::*;
 
     const DATA_DIR: &str = "../../data";

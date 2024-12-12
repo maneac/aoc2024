@@ -32,7 +32,7 @@ impl Input {
 }
 
 #[cfg(test)]
-mod tests {
+mod <%= &self.crate_name %>_tests {
     use super::*;
 
     const DATA_DIR: &str = "../../data";
