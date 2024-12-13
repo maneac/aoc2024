@@ -61,7 +61,7 @@ impl Input {
                             .is_none_or(|[left_idx, right_idx]| left_idx < right_idx)
                     })
                     .then_some(
-                        #[allow(clippy::indexing_slicing)]
+                        #[expect(clippy::indexing_slicing)]
                         usize::from(page[page.len() >> 1_u8]),
                     )
             })
@@ -103,7 +103,7 @@ impl Input {
                     }
                     Ordering::Equal
                 });
-                #[allow(clippy::indexing_slicing)]
+                #[expect(clippy::indexing_slicing)]
                 let res = usize::from(sorted_page[sorted_page.len() >> 1_u8]);
                 res
             })

@@ -112,7 +112,7 @@ enum Facing {
     Left,
 }
 
-#[allow(clippy::copy_iterator)]
+#[expect(clippy::copy_iterator)]
 impl Iterator for Facing {
     type Item = Self;
 
