@@ -34,7 +34,7 @@ impl Input {
     }
 
     #[must_use]
-    #[allow(clippy::indexing_slicing)]
+    #[expect(clippy::indexing_slicing)]
     pub fn part_1(&self) -> usize {
         self.list
             .iter()
@@ -49,7 +49,7 @@ impl Input {
     }
 
     #[must_use]
-    #[allow(clippy::indexing_slicing)]
+    #[expect(clippy::indexing_slicing)]
     pub fn part_2(&self) -> usize {
         self.list
             .iter()

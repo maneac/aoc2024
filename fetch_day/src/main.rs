@@ -15,7 +15,7 @@ use reqwest::Error;
 use sailfish::TemplateOnce;
 
 #[derive(clap::Parser, Debug)]
-#[allow(clippy::struct_excessive_bools)]
+#[expect(clippy::struct_excessive_bools)]
 struct Opts {
     #[arg(
         short,
