@@ -125,8 +125,10 @@ fn tokens_for_prize(machine: &Machine) -> Option<usize> {
 
     let (x_mul, y_mul, discriminant) = if xb_ya < xa_yb && xb_ty < yb_tx && ya_tx < xa_ty {
         (yb_tx - xb_ty, xa_ty - ya_tx, xa_yb - xb_ya)
-    } else {
+    } else if xb_ya >= xa_yb && xb_ty >= yb_tx && ya_tx >= xa_ty {
         (xb_ty - yb_tx, ya_tx - xa_ty, xb_ya - xa_yb)
+    } else {
+        return None;
     };
 
     (x_mul % discriminant == 0 && y_mul % discriminant == 0)
