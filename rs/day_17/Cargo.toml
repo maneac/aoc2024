@@ -1,0 +1,21 @@
+[package]
+name = "day_17"
+edition.workspace = true
+version.workspace = true
+description.workspace = true
+publish.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+rayon.workspace = true
+
+[dev-dependencies]
+criterion.workspace = true
+pprof = { version = "0.14.0", features = ["flamegraph"] }
+
+[[bench]]
+name = "bench"
+harness = false
+
+[lints]
+workspace = true
